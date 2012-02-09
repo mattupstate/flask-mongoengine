@@ -1,7 +1,10 @@
 import re
 
 import pymongo
-from flaskext.debugtoolbar.panels import DebugPanel
+try:
+    from flask_debugtoolbar.panels import DebugPanel
+except ImportError:
+    from flaskext.debugtoolbar.panels import DebugPanel
 from jinja2 import PackageLoader, ChoiceLoader
 from mongoengine.connection import _get_db
 
