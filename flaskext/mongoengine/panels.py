@@ -13,6 +13,20 @@ import operation_tracker
 _ = lambda x: x
 
 
+package_loader = PackageLoader('flaskext.mongoengine', 'templates')
+
+
+def _maybe_patch_jinja_loader(jinja_env):
+    """
+    Patch the jinja_env loader to include flaskext.mongoengine templates
+    folder if necessary.
+    """
+    if not isinstance(jinja_env.loader, ChoiceLoader):
+        jinja_env.loader = ChoiceLoader([jinja_env.loader, package_loader])
+    elif package_loader not in jinja_env.loader.loaders:
+        jinja_env.loader.loaders.append(package_loader)
+
+
 class MongoenginePanel(DebugPanel):
     """
     Panel that displays the number of mongodb queries using mongoengine.
@@ -30,13 +44,8 @@ class MongoenginePanel(DebugPanel):
     slow_query_limit = 100
 
     def __init__(self, *args, **kwargs):
-        """
-        We need to patch jinja_env loader to include flaskext.mongoengine
-        templates folder.
-        """
         super(MongoenginePanel, self).__init__(*args, **kwargs)
-        self.jinja_env.loader = ChoiceLoader([self.jinja_env.loader,
-                          PackageLoader('flaskext.mongoengine', 'templates')])
+        _maybe_patch_jinja_loader(self.jinja_env)
         self.db = _get_db()
 
     def process_request(self, request):
@@ -164,13 +173,8 @@ class MongoDebugPanel(DebugPanel):
     has_content = True
 
     def __init__(self, *args, **kwargs):
-        """
-        We need to patch jinja_env loader to include flaskext.mongoengine
-        templates folder.
-        """
         super(MongoDebugPanel, self).__init__(*args, **kwargs)
-        self.jinja_env.loader = ChoiceLoader([self.jinja_env.loader,
-                          PackageLoader('flaskext.mongoengine', 'templates')])
+        _maybe_patch_jinja_loader(self.jinja_env)
         operation_tracker.install_tracker()
 
     def process_request(self, request):
