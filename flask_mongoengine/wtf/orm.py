@@ -4,8 +4,8 @@ Tools for generating forms based on mongoengine Document schemas.
 import inspect
 from wtforms import fields as f, validators
 
-from flaskext.mongoengine.wtf.fields import ModelSelectField
-from flaskext.mongoengine.wtf.models import ModelForm
+from flask_mongoengine.wtf.fields import ModelSelectField
+from flask_mongoengine.wtf.models import ModelForm
 
 __all__ = (
     'model_fields', 'model_form',

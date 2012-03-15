@@ -1,7 +1,7 @@
 import re
 
 import pymongo
-from flaskext.debugtoolbar.panels import DebugPanel
+from flask.ext.debugtoolbar.panels import DebugPanel
 from jinja2 import PackageLoader, ChoiceLoader
 from mongoengine.connection import _get_db
 
@@ -33,7 +33,7 @@ class MongoenginePanel(DebugPanel):
         """
         super(MongoenginePanel, self).__init__(*args, **kwargs)
         self.jinja_env.loader = ChoiceLoader([self.jinja_env.loader,
-                          PackageLoader('flaskext.mongoengine', 'templates')])
+                          PackageLoader('flask_mongoengine', 'templates')])
         self.db = _get_db()
 
     def process_request(self, request):
@@ -167,7 +167,7 @@ class MongoDebugPanel(DebugPanel):
         """
         super(MongoDebugPanel, self).__init__(*args, **kwargs)
         self.jinja_env.loader = ChoiceLoader([self.jinja_env.loader,
-                          PackageLoader('flaskext.mongoengine', 'templates')])
+                          PackageLoader('flask_mongoengine', 'templates')])
         operation_tracker.install_tracker()
 
     def process_request(self, request):

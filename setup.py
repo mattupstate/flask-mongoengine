@@ -24,10 +24,8 @@ setup(
     author_email='ross.lawley@streetlife.com',
     description='Flask support for MongoDB and with WTF model forms',
     long_description=__doc__,
-    packages=['flaskext',
-              'flaskext.mongoengine',
-              'flaskext.mongoengine.wtf'],
-    namespace_packages=['flaskext'],
+    packages=['flask_mongoengine',
+              'flask_mongoengine.wtf'],
     test_suite='nose.collector',
     zip_safe=False,
     platforms='any',
@@ -39,6 +37,7 @@ setup(
     include_package_data=True,
     tests_require=[
         'nose',
+        'flask-debugtoolbar'
     ],
     classifiers=[
         'Development Status :: 4 - Beta',

@@ -3,8 +3,9 @@ from __future__ import with_statement
 import unittest
 import datetime
 import flask
-from flaskext import mongoengine
-from flaskext.mongoengine.wtf import model_form
+import flask_mongoengine as mongoengine
+from flask_mongoengine.wtf import model_form
+from flask.ext.debugtoolbar import DebugToolbarExtension
 
 
 def make_todo_model(db):
@@ -22,6 +23,10 @@ class BasicAppTestCase(unittest.TestCase):
         app = flask.Flask(__name__)
         app.config['MONGODB_DB'] = 'testing'
         app.config['TESTING'] = True
+        app.config['DEBUG_TB_PANELS'] = ('flaskext.mongoengine.panels.MongoDebugPanel',)
+        
+        DebugToolbarExtension(app)
+        
         db = mongoengine.MongoEngine()
         self.Todo = make_todo_model(db)
 
@@ -87,7 +92,8 @@ class WTFormsAppTestCase(unittest.TestCase):
         self.db.init_app(app)
 
     def tearDown(self):
-        self.db.connection.connection.drop_database(self.db.connection)
+        #print '*' * 60
+        self.db.connection.drop_database('testing')
 
     def test_model_form(self):
         db = self.db
